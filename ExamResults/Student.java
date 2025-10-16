@@ -5,15 +5,17 @@ import java.util.List;
 
 class Student {
     private int studentId;
-    private String studentName;
+    private String firstName;
+    private String surname;
     private List<Exam> examsTaken;
 
-    public Student(int studentId, String studentName) throws StudentException {
-        if (studentName.length() < 2 || studentName.length() > 30) {
-            throw new StudentException("Student name should be between 2 and 30 characters in length");
+    public Student(int studentId, String firstName, String surname) throws StudentException {
+        if (firstName.length() < 2 || firstName.length() > 30 || surname.length() < 2 || surname.length() > 30) {
+            throw new StudentException("First name and surname should be between 2 and 30 characters in length");
         }
         this.studentId = studentId;
-        this.studentName = studentName;
+        this.firstName = firstName;
+        this.surname = surname;
         this.examsTaken = new ArrayList<>();
     }
 
@@ -21,8 +23,16 @@ class Student {
         return studentId;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
     public String getStudentName() {
-        return studentName;
+        return firstName + " " + surname;
     }
 
     public List<Exam> getExamsTaken() {
@@ -37,8 +47,7 @@ class Student {
         return studentId.matches("\\d+");
     }
 
-    public static boolean isValidStudentName(String studentName) {
-        return studentName.matches("[a-zA-Z]+");
+    public static boolean isValidStudentName(String name) {
+        return name.matches("[a-zA-Z]+");
     }
-
 }

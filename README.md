@@ -149,7 +149,7 @@ Results are stored in two formats:
 
 ## Credits
 
-- Developed by Sergiy Kochenko
+- Developed by Student Sergiy Kochenko
 - For ATU Donegal Software Development Course
 - Year: 2025/2026
 

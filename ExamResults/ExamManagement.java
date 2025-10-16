@@ -58,16 +58,22 @@ class ExamManagement {
 
                         int studentIdInt = Integer.parseInt(studentIdString);
 
-                        System.out.print("Enter Student Name: ");
-                        String studentName = scanner.nextLine();
+                        System.out.print("Enter First Name: ");
+                        String firstName = scanner.nextLine();
+                        if (!Student.isValidStudentName(firstName)) {
+                            System.out.println(RED + "Invalid first name. Please enter only alphabetic characters." + RESET);
+                            break;
+                        }
 
-                        if (!Student.isValidStudentName(studentName)) {
-                            System.out.println(RED + "Invalid student name. Please enter only alphabetic characters." + RESET);
+                        System.out.print("Enter Surname: ");
+                        String surname = scanner.nextLine();
+                        if (!Student.isValidStudentName(surname)) {
+                            System.out.println(RED + "Invalid surname. Please enter only alphabetic characters." + RESET);
                             break;
                         }
 
                         try {
-                            Student student = new Student(studentIdInt, studentName);
+                            Student student = new Student(studentIdInt, firstName, surname);
                             students.add(student);
                             System.out.println(ORANGE +"Student added successfully." +RESET);
                             System.out.println(BLUE + "1. Add Student" + RESET);
@@ -229,8 +235,9 @@ class ExamManagement {
         for (ExamResult result : examResults) {
             Student student = result.getStudent();
             Exam exam = result.getExam();
+            // Use full name (firstName + " " + surname)
             System.out.println(String.format("%-22d%-30s%-25d%-25s",
-                    student.getStudentId(), student.getStudentName(),
+                    student.getStudentId(), student.getFirstName() + " " + student.getSurname(),
                     exam.getExamId(), exam.getSubject()));
         }
     }
@@ -245,8 +252,9 @@ class ExamManagement {
             Student student = result.getStudent();
             Exam exam = result.getExam();
             String examType = (exam instanceof MultipleChoice) ? "Multi Choice" : "Essay";
+            // Use full name (firstName + " " + surname)
             System.out.println(String.format("%-22d%-30s%-25d%-25s%-25s%-25d",
-                    student.getStudentId(), student.getStudentName(),
+                    student.getStudentId(), student.getFirstName() + " " + student.getSurname(),
                     exam.getExamId(), exam.getSubject(), examType, result.getScore()));
         }
     }
@@ -261,8 +269,9 @@ class ExamManagement {
         for (ExamResult result : examResults) {
             Student student = result.getStudent();
             Exam exam = result.getExam();
+            // Use full name (firstName + " " + surname)
             writer.write(String.format("%-22d%-30s%-25d%-25s\n",
-                    student.getStudentId(), student.getStudentName(),
+                    student.getStudentId(), student.getFirstName() + " " + student.getSurname(),
                     exam.getExamId(), exam.getSubject()));
         }
 
@@ -281,8 +290,9 @@ class ExamManagement {
             Student student = result.getStudent();
             Exam exam = result.getExam();
             String examType = (exam instanceof MultipleChoice) ? "Multi Choice" : "Essay";
+            // Use full name (firstName + " " + surname)
             writer.write(String.format("%-22d%-30s%-25d%-25s%-25s%-25d\n",
-                    student.getStudentId(), student.getStudentName(),
+                    student.getStudentId(), student.getFirstName() + " " + student.getSurname(),
                     exam.getExamId(), exam.getSubject(), examType, result.getScore()));
         }
 
