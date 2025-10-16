@@ -149,9 +149,9 @@ Results are stored in two formats:
 
 ## Credits
 
-- Developed by [Your Name]
-- For Code Institute Java Development Course
-- Year: 2023
+- Developed by Sergiy Kochenko
+- For ATU Donegal Software Development Course
+- Year: 2025/2026
 
 ## License
 
