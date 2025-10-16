@@ -1,8 +1,64 @@
 # Exam Management System
 
-This is a Java console application for managing student exam results. The system allows for tracking multiple-choice and essay exams, student records, and generating detailed reports.
+## Table of Contents
+- [Exam Management System](#exam-management-system)
+  - [Table of Contents](#table-of-contents)
+  - [Overview](#overview)
+  - [Technical Competencies](#technical-competencies)
+    - [1. Object-Oriented Programming](#1-object-oriented-programming)
+    - [2. Exception Handling](#2-exception-handling)
+    - [3. File I/O Operations](#3-file-io-operations)
+    - [4. Data Structures](#4-data-structures)
+    - [5. User Interface](#5-user-interface)
+    - [6. Design Patterns](#6-design-patterns)
+  - [Features](#features)
+  - [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Installation](#installation)
+  - [Usage](#usage)
+    - [Input Validation](#input-validation)
+  - [Project Structure](#project-structure)
+  - [Testing](#testing)
+  - [Data Storage](#data-storage)
+  - [Credits](#credits)
+  - [License](#license)
+  - [Acknowledgments](#acknowledgments)
 
-![ExamManagement Console](screenshots/console.png)
+## Overview
+This Java console application demonstrates proficiency in object-oriented programming and data management through an exam results management system.
+
+## Technical Competencies
+
+### 1. Object-Oriented Programming
+- Implementation of inheritance (`Exam`, `MultipleChoice`, `Essay`)
+- Use of interfaces (`Scorable`, `Printable`)
+- Encapsulation through private fields and public methods
+- Polymorphism in exam type handling
+
+### 2. Exception Handling
+- Custom exceptions (`StudentException`, `ExamException`)
+- Input validation and error management
+- Robust error messaging system
+
+### 3. File I/O Operations
+- Writing to external files (summary_result.txt, detailed_results.txt)
+- Structured data output formatting
+- BufferedWriter implementation
+
+### 4. Data Structures
+- ArrayList implementation for student and exam management
+- List interface usage
+- Complex object relationships
+
+### 5. User Interface
+- Console-based menu system
+- Color-coded output for better UX
+- Input validation and user feedback
+
+### 6. Design Patterns
+- Singleton pattern for exam management
+- Strategy pattern for exam scoring
+- Factory method for exam creation
 
 ## Features
 
@@ -103,5 +159,5 @@ This project is licensed under the MIT License - see the LICENSE.md file for det
 
 ## Acknowledgments
 
-- Code Institute for project requirements and guidance
+- ATU Donegal for project requirements and guidance
 - [Any other acknowledgments]
