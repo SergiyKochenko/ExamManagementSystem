@@ -69,6 +69,7 @@ This Java console application demonstrates proficiency in object-oriented progra
 - Generate detailed exam results
 - Input validation and error handling
 - Color-coded console interface
+- **Validated input for all entries** (IDs, names, numbers, etc.)
 
 ## Getting Started
 
@@ -112,10 +113,12 @@ The system provides a menu-driven interface with the following options:
 
 ### Input Validation
 
-- Student names must be 2-30 characters long
-- Multiple Choice exams must have 10-50 questions
-- Essay word limits must be between 500-10000 words
+- Student IDs must be numeric and not empty
+- First name and surname must be alphabetic and 2-30 characters long
+- Multiple Choice exams must have 10-50 questions, correct answers must be valid
+- Essay word limits must be between 500-10000 words, answer cannot be empty
 - Exam duration must be between 30-180 minutes
+- All numeric fields are validated for correct format and range
 
 ## Project Structure
 
@@ -140,6 +143,7 @@ The application includes validation for:
 - Student name format
 - Exam parameters
 - Input type checking
+- **All user entries are validated before processing**
 
 ## Data Storage
 

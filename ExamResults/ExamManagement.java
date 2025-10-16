@@ -50,8 +50,8 @@ class ExamManagement {
                 switch (choice) {
                     case 1:
                         System.out.print("Enter Student ID: ");
-                        String studentIdString = scanner.nextLine();
-                        if (!Student.isValidStudentId(studentIdString)) {
+                        String studentIdString = scanner.nextLine().trim();
+                        if (studentIdString.isEmpty() || !Student.isValidStudentId(studentIdString)) {
                             System.out.println(RED + "Invalid student ID. Please enter only numeric characters." + RESET);
                             break;
                         }
@@ -59,15 +59,15 @@ class ExamManagement {
                         int studentIdInt = Integer.parseInt(studentIdString);
 
                         System.out.print("Enter First Name: ");
-                        String firstName = scanner.nextLine();
-                        if (!Student.isValidStudentName(firstName)) {
+                        String firstName = scanner.nextLine().trim();
+                        if (firstName.isEmpty() || !Student.isValidStudentName(firstName)) {
                             System.out.println(RED + "Invalid first name. Please enter only alphabetic characters." + RESET);
                             break;
                         }
 
                         System.out.print("Enter Surname: ");
-                        String surname = scanner.nextLine();
-                        if (!Student.isValidStudentName(surname)) {
+                        String surname = scanner.nextLine().trim();
+                        if (surname.isEmpty() || !Student.isValidStudentName(surname)) {
                             System.out.println(RED + "Invalid surname. Please enter only alphabetic characters." + RESET);
                             break;
                         }
@@ -85,33 +85,57 @@ class ExamManagement {
                     case 2:
                         try {
                             System.out.print("Enter Student ID: ");
-                            int studentId = scanner.nextInt();
-                            scanner.nextLine();
-
-                            System.out.print("Enter Exam ID: ");
-                            int examId = scanner.nextInt();
-                            scanner.nextLine();
-
-                            System.out.print("Enter Subject: ");
-                            String subject = scanner.nextLine();
-
-                            System.out.print("Enter Duration (in minutes): ");
-                            int duration = scanner.nextInt();
-                            scanner.nextLine();
-
-                            System.out.print("Enter Total Questions: ");
-                            int noQuestions = scanner.nextInt();
-                            scanner.nextLine();
-
-                            System.out.print("Enter Correct Answers: ");
-                            int correctAnswers = scanner.nextInt();
-                            scanner.nextLine();
+                            String studentIdInput = scanner.nextLine().trim();
+                            if (studentIdInput.isEmpty() || !Student.isValidStudentId(studentIdInput)) {
+                                System.out.println(RED + "Invalid student ID. Please enter only numeric characters." + RESET);
+                                break;
+                            }
+                            int studentId = Integer.parseInt(studentIdInput);
 
                             Student student = findStudentById(students, studentId);
                             if (student == null) {
                                 System.out.println(RED + "Student not found." + RESET);
                                 break;
                             }
+
+                            System.out.print("Enter Exam ID: ");
+                            String examIdInput = scanner.nextLine().trim();
+                            if (examIdInput.isEmpty() || !examIdInput.matches("\\d+")) {
+                                System.out.println(RED + "Invalid exam ID. Please enter only numeric characters." + RESET);
+                                break;
+                            }
+                            int examId = Integer.parseInt(examIdInput);
+
+                            System.out.print("Enter Subject: ");
+                            String subject = scanner.nextLine().trim();
+                            if (subject.isEmpty() || !subject.matches("[a-zA-Z ]+")) {
+                                System.out.println(RED + "Invalid subject. Please enter only alphabetic characters and spaces." + RESET);
+                                break;
+                            }
+
+                            System.out.print("Enter Duration (in minutes): ");
+                            String durationInput = scanner.nextLine().trim();
+                            if (durationInput.isEmpty() || !durationInput.matches("\\d+")) {
+                                System.out.println(RED + "Invalid duration. Please enter only numeric characters." + RESET);
+                                break;
+                            }
+                            int duration = Integer.parseInt(durationInput);
+
+                            System.out.print("Enter Total Questions: ");
+                            String noQuestionsInput = scanner.nextLine().trim();
+                            if (noQuestionsInput.isEmpty() || !noQuestionsInput.matches("\\d+")) {
+                                System.out.println(RED + "Invalid number of questions. Please enter only numeric characters." + RESET);
+                                break;
+                            }
+                            int noQuestions = Integer.parseInt(noQuestionsInput);
+
+                            System.out.print("Enter Correct Answers: ");
+                            String correctAnswersInput = scanner.nextLine().trim();
+                            if (correctAnswersInput.isEmpty() || !correctAnswersInput.matches("\\d+")) {
+                                System.out.println(RED + "Invalid correct answers. Please enter only numeric characters." + RESET);
+                                break;
+                            }
+                            int correctAnswers = Integer.parseInt(correctAnswersInput);
 
                             try {
                                 Exam exam = new MultipleChoice(examId, subject, duration, correctAnswers, noQuestions);
@@ -133,40 +157,72 @@ class ExamManagement {
                     case 3:
                         try {
                             System.out.print("Enter Student ID: ");
-                            int studentId = scanner.nextInt();
-                            scanner.nextLine();
-
-                            System.out.print("Enter Exam ID: ");
-                            int examId = scanner.nextInt();
-                            scanner.nextLine();
-
-                            System.out.print("Enter Subject: ");
-                            String subject = scanner.nextLine();
-
-                            System.out.print("Enter Duration (in minutes): ");
-                            int duration = scanner.nextInt();
-                            scanner.nextLine();
-
-                            System.out.print("Enter Essay Answer: ");
-                            String essayAnswer = scanner.nextLine();
-
-                            System.out.print("Enter Grammar Marks: ");
-                            int grammar = scanner.nextInt();
-                            scanner.nextLine();
-
-                            System.out.print("Enter Content Marks: ");
-                            int content = scanner.nextInt();
-                            scanner.nextLine();
-
-                            System.out.print("Enter Word Limit: ");
-                            int wordLimit = scanner.nextInt();
-                            scanner.nextLine();
+                            String studentIdInput = scanner.nextLine().trim();
+                            if (studentIdInput.isEmpty() || !Student.isValidStudentId(studentIdInput)) {
+                                System.out.println(RED + "Invalid student ID. Please enter only numeric characters." + RESET);
+                                break;
+                            }
+                            int studentId = Integer.parseInt(studentIdInput);
 
                             Student student = findStudentById(students, studentId);
                             if (student == null) {
                                 System.out.println(RED + "Student not found." + RESET);
                                 break;
                             }
+
+                            System.out.print("Enter Exam ID: ");
+                            String examIdInput = scanner.nextLine().trim();
+                            if (examIdInput.isEmpty() || !examIdInput.matches("\\d+")) {
+                                System.out.println(RED + "Invalid exam ID. Please enter only numeric characters." + RESET);
+                                break;
+                            }
+                            int examId = Integer.parseInt(examIdInput);
+
+                            System.out.print("Enter Subject: ");
+                            String subject = scanner.nextLine().trim();
+                            if (subject.isEmpty() || !subject.matches("[a-zA-Z ]+")) {
+                                System.out.println(RED + "Invalid subject. Please enter only alphabetic characters and spaces." + RESET);
+                                break;
+                            }
+
+                            System.out.print("Enter Duration (in minutes): ");
+                            String durationInput = scanner.nextLine().trim();
+                            if (durationInput.isEmpty() || !durationInput.matches("\\d+")) {
+                                System.out.println(RED + "Invalid duration. Please enter only numeric characters." + RESET);
+                                break;
+                            }
+                            int duration = Integer.parseInt(durationInput);
+
+                            System.out.print("Enter Essay Answer: ");
+                            String essayAnswer = scanner.nextLine().trim();
+                            if (essayAnswer.isEmpty()) {
+                                System.out.println(RED + "Essay answer cannot be empty." + RESET);
+                                break;
+                            }
+
+                            System.out.print("Enter Grammar Marks: ");
+                            String grammarInput = scanner.nextLine().trim();
+                            if (grammarInput.isEmpty() || !grammarInput.matches("\\d+")) {
+                                System.out.println(RED + "Invalid grammar marks. Please enter only numeric characters." + RESET);
+                                break;
+                            }
+                            int grammar = Integer.parseInt(grammarInput);
+
+                            System.out.print("Enter Content Marks: ");
+                            String contentInput = scanner.nextLine().trim();
+                            if (contentInput.isEmpty() || !contentInput.matches("\\d+")) {
+                                System.out.println(RED + "Invalid content marks. Please enter only numeric characters." + RESET);
+                                break;
+                            }
+                            int content = Integer.parseInt(contentInput);
+
+                            System.out.print("Enter Word Limit: ");
+                            String wordLimitInput = scanner.nextLine().trim();
+                            if (wordLimitInput.isEmpty() || !wordLimitInput.matches("\\d+")) {
+                                System.out.println(RED + "Invalid word limit. Please enter only numeric characters." + RESET);
+                                break;
+                            }
+                            int wordLimit = Integer.parseInt(wordLimitInput);
 
                             try {
                                 Exam exam = new Essay(examId, subject, duration, essayAnswer, grammar, content, wordLimit);
