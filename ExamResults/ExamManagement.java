@@ -4,8 +4,10 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 class ExamManagement {
@@ -37,14 +39,14 @@ class ExamManagement {
             clearScreen();
             printBanner();
             printMenu(students.size(), examResults.size());
-            System.out.print(ORANGE + "Enter your choice (1-7): " + RESET);
+            System.out.print(ORANGE + "Enter your choice (1-8): " + RESET);
 
             try {
                 int choice = scanner.nextInt();
                 scanner.nextLine();
 
-                if (choice < 1 || choice > 7) {
-                    System.out.println(RED + "Invalid choice. Please enter a number between 1 and 7." + RESET);
+                if (choice < 1 || choice > 8) {
+                    System.out.println(RED + "Invalid choice. Please enter a number between 1 and 8." + RESET);
                     pause(scanner);
                     continue;
                 }
@@ -383,6 +385,11 @@ class ExamManagement {
                         scanner.close();
                         return;
 
+                    case 8:
+                        runSystemSimulation();
+                        pause(scanner);
+                        break;
+
                     default:
                         System.out.println(RED + "Invalid choice. Please try again." + RESET);
                         pause(scanner);
@@ -587,6 +594,7 @@ class ExamManagement {
         System.out.println(BRIGHT_CYAN + "║  " + BRIGHT_GREEN + "5." + WHITE + " [=] Print Summary Result" + "                                     " + BRIGHT_CYAN + "     ║" + RESET);
         System.out.println(BRIGHT_CYAN + "║  " + BRIGHT_GREEN + "6." + WHITE + " [=] Print Detailed Results" + "                                   " + BRIGHT_CYAN + "     ║" + RESET);
         System.out.println(BRIGHT_CYAN + "║  " + RED + "7." + WHITE + " [X] Quit" + "                                                      " + BRIGHT_CYAN + "    ║" + RESET);
+        System.out.println(BRIGHT_CYAN + "║  " + BRIGHT_BLUE + "8." + WHITE + " [>] Run System Simulation (demo)" + "                             " + BRIGHT_CYAN + "     ║" + RESET);
         System.out.println(BRIGHT_CYAN + "╠═══════════════════════════════════════════════════════════════════════╣" + RESET);
         System.out.println(BRIGHT_CYAN + "║  " + YELLOW + "Students: " + BOLD + BRIGHT_GREEN + String.format("%-3d", studentsCount) + RESET + 
                           YELLOW + "  |  Exam Results: " + BOLD + BRIGHT_GREEN + String.format("%-3d", examsCount) + RESET + 
@@ -646,5 +654,152 @@ class ExamManagement {
             // fallback to -1 on any reflection issue
         }
         return -1;
+    }
+
+    // Demo simulation without introducing new classes/files.
+    private static void runSystemSimulation() {
+        System.out.println();
+        System.out.println(BRIGHT_CYAN + "===== System Simulation: Students, Lecturers, Admin, Courses, Modules, Assessments =====" + RESET);
+
+        // Mock admin, lecturers, course, and modules (as strings/maps)
+        String admin = "Alice Admin (Admin ID: 9001)";
+        String courseCode = "BSC-COMP";
+        String courseTitle = "BSc (Hons) in Computing";
+
+        String[] moduleCodes = {"PROG101", "DSA201", "SE202", "DBS102"};
+        String[] moduleTitles = {"Programming 1", "Data Structures", "Software Engineering", "Databases Fundamentals"};
+        String[] lecturers = {"Dr. Smith", "Dr. Smith", "Prof. Johnson", "Dr. Garcia"};
+
+        Map<String, String> moduleTitleMap = new HashMap<>();
+        Map<String, String> moduleLecturerMap = new HashMap<>();
+        for (int i = 0; i < moduleCodes.length; i++) {
+            moduleTitleMap.put(moduleCodes[i], moduleTitles[i]);
+            moduleLecturerMap.put(moduleCodes[i], lecturers[i]);
+        }
+
+        System.out.println(YELLOW + "Admin: " + WHITE + admin + RESET);
+        System.out.println(BRIGHT_CYAN + "Course: " + WHITE + courseCode + " - " + courseTitle + RESET);
+
+        System.out.println();
+        System.out.println(BRIGHT_CYAN + "Modules & Lecturers" + RESET);
+        for (String code : moduleCodes) {
+            System.out.println("  " + code + " - " + moduleTitleMap.get(code) + " | Lecturer: " + moduleLecturerMap.get(code));
+        }
+
+        // Create sample students
+        List<Student> simStudents = new ArrayList<>();
+        try {
+            simStudents.add(new Student(2001, "Jane", "Doe"));
+            simStudents.add(new Student(2002, "Mark", "Lee"));
+            simStudents.add(new Student(2003, "Sara", "Khan"));
+        } catch (StudentException e) {
+            System.out.println(RED + e.getMessage() + RESET);
+            return;
+        }
+
+        System.out.println();
+        System.out.println(BRIGHT_CYAN + "Enrolled Students" + RESET);
+        for (Student s : simStudents) {
+            System.out.println("  " + s.getStudentId() + " - " + s.getFirstName() + " " + s.getSurname());
+        }
+
+        // Assessments grouped per module
+        Map<String, List<ExamResult>> moduleResults = new HashMap<>();
+        for (String code : moduleCodes) moduleResults.put(code, new ArrayList<>());
+
+        List<ExamResult> allResults = new ArrayList<>();
+
+        try {
+            // Jane
+            Exam e1 = new MultipleChoice(1, "PROG101 - Programming 1", 60, 42, 50); // 84%
+            simStudents.get(0).addExam(e1);
+            int sc1 = (int) ((MultipleChoice) e1).calculateScore();
+            ExamResult r1 = new ExamResult(simStudents.get(0), e1, sc1);
+            moduleResults.get("PROG101").add(r1); allResults.add(r1);
+
+            Exam e2 = new Essay(2, "SE202 - Software Engineering", 90, "Solid design and documentation.", 43, 45, 2000);
+            simStudents.get(0).addExam(e2);
+            int sc2 = (int) ((Essay) e2).calculateScore();
+            ExamResult r2 = new ExamResult(simStudents.get(0), e2, sc2);
+            moduleResults.get("SE202").add(r2); allResults.add(r2);
+
+            // Mark
+            Exam e3 = new Practical(3, "DSA201 - Data Structures", 36, 12, 50); // 96%
+            simStudents.get(1).addExam(e3);
+            int sc3 = (int) ((Practical) e3).calculateScore();
+            ExamResult r3 = new ExamResult(simStudents.get(1), e3, sc3);
+            moduleResults.get("DSA201").add(r3); allResults.add(r3);
+
+            Exam e4 = new MultipleChoice(4, "DBS102 - Databases Fundamentals", 45, 32, 40); // 80%
+            simStudents.get(1).addExam(e4);
+            int sc4 = (int) ((MultipleChoice) e4).calculateScore();
+            ExamResult r4 = new ExamResult(simStudents.get(1), e4, sc4);
+            moduleResults.get("DBS102").add(r4); allResults.add(r4);
+
+            // Sara
+            Exam e5 = new Essay(5, "PROG101 - Programming 1", 75, "Good fundamentals with examples.", 40, 42, 1500);
+            simStudents.get(2).addExam(e5);
+            int sc5 = (int) ((Essay) e5).calculateScore();
+            ExamResult r5 = new ExamResult(simStudents.get(2), e5, sc5);
+            moduleResults.get("PROG101").add(r5); allResults.add(r5);
+
+            Exam e6 = new Practical(6, "SE202 - Software Engineering", 28, 14, 50);
+            simStudents.get(2).addExam(e6);
+            int sc6 = (int) ((Practical) e6).calculateScore();
+            ExamResult r6 = new ExamResult(simStudents.get(2), e6, sc6);
+            moduleResults.get("SE202").add(r6); allResults.add(r6);
+
+        } catch (ExamException ex) {
+            System.out.println(RED + ex.getMessage() + RESET);
+            return;
+        }
+
+        System.out.println();
+        System.out.println(BRIGHT_CYAN + "Assessments by Module" + RESET);
+        double total = 0; int count = 0;
+        for (String code : moduleCodes) {
+            String title = moduleTitleMap.get(code);
+            System.out.println(YELLOW + "> " + code + " - " + title + RESET);
+            List<ExamResult> results = moduleResults.get(code);
+            if (results.isEmpty()) {
+                System.out.println("  (no results)");
+                continue;
+            }
+            int modSum = 0;
+            for (ExamResult r : results) {
+                Student s = r.getStudent();
+                Exam ex = r.getExam();
+                String subj = getExamSubject(ex);
+                System.out.println("  - " + s.getFirstName() + " " + s.getSurname()
+                        + " | ExamID: " + getExamId(ex)
+                        + " | Subject: " + subj
+                        + " | Score: " + r.getScore() + "%");
+                modSum += r.getScore();
+            }
+            double modAvg = (double) modSum / results.size();
+            System.out.printf("  Module Average: %.2f%%%n", modAvg);
+            total += modSum; count += results.size();
+        }
+
+        System.out.println();
+        System.out.println(BRIGHT_CYAN + "Per-Student Averages" + RESET);
+        for (Student s : simStudents) {
+            int sSum = 0, sCnt = 0;
+            for (ExamResult r : allResults) {
+                if (r.getStudent().getStudentId() == s.getStudentId()) {
+                    sSum += r.getScore(); sCnt++;
+                }
+            }
+            double avg = sCnt == 0 ? 0.0 : (double) sSum / sCnt;
+            String color = avg >= 70 ? BRIGHT_GREEN : (avg >= 50 ? YELLOW : RED);
+            System.out.printf("  %s%s %s%s: %.2f%%%s%n",
+                    color, s.getFirstName(), s.getSurname(), RESET, avg, RESET);
+        }
+
+        System.out.println();
+        double courseAvg = count == 0 ? 0.0 : total / count;
+        System.out.printf(BRIGHT_BLUE + "Overall Course Average: " + BOLD + "%.2f%%%s%n", courseAvg, RESET);
+
+        System.out.println(BRIGHT_GREEN + "[OK] Simulation complete." + RESET);
     }
 }
