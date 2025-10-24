@@ -37,14 +37,14 @@ class ExamManagement {
             clearScreen();
             printBanner();
             printMenu(students.size(), examResults.size());
-            System.out.print(ORANGE + "Enter your choice (1-6): " + RESET);
+            System.out.print(ORANGE + "Enter your choice (1-7): " + RESET);
 
             try {
                 int choice = scanner.nextInt();
                 scanner.nextLine();
 
-                if (choice < 1 || choice > 6) {
-                    System.out.println(RED + "Invalid choice. Please enter a number between 1 and 6." + RESET);
+                if (choice < 1 || choice > 7) {
+                    System.out.println(RED + "Invalid choice. Please enter a number between 1 and 7." + RESET);
                     pause(scanner);
                     continue;
                 }
@@ -274,6 +274,92 @@ class ExamManagement {
                         break;
 
                     case 4:
+                        // Add Practical Exam
+                        try {
+                            System.out.print("Enter Student ID: ");
+                            String studentIdInput = scanner.nextLine().trim();
+                            if (studentIdInput.isEmpty() || !Student.isValidStudentId(studentIdInput)) {
+                                System.out.println(RED + "Invalid student ID. Please enter only numeric characters." + RESET);
+                                pause(scanner);
+                                break;
+                            }
+                            int studentId = Integer.parseInt(studentIdInput);
+
+                            Student student = findStudentById(students, studentId);
+                            if (student == null) {
+                                System.out.println(RED + "Student not found." + RESET);
+                                pause(scanner);
+                                break;
+                            }
+
+                            System.out.print("Enter Exam ID: ");
+                            String examIdInput = scanner.nextLine().trim();
+                            if (examIdInput.isEmpty() || !examIdInput.matches("\\d+")) {
+                                System.out.println(RED + "Invalid exam ID. Please enter only numeric characters." + RESET);
+                                pause(scanner);
+                                break;
+                            }
+                            int examId = Integer.parseInt(examIdInput);
+
+                            System.out.print("Enter Subject: ");
+                            String subject = scanner.nextLine().trim();
+                            if (subject.isEmpty() || !subject.matches("[a-zA-Z ]+")) {
+                                System.out.println(RED + "Invalid subject. Please enter only alphabetic characters and spaces." + RESET);
+                                pause(scanner);
+                                break;
+                            }
+
+                            // --- Duration prompt and validation are skipped for Practical Exam ---
+
+                            System.out.print("Enter Implementation Marks: ");
+                            String implInput = scanner.nextLine().trim();
+                            if (implInput.isEmpty() || !implInput.matches("\\d+")) {
+                                System.out.println(RED + "Invalid marks. Please enter only numeric characters." + RESET);
+                                pause(scanner);
+                                break;
+                            }
+                            int implementation = Integer.parseInt(implInput);
+
+                            System.out.print("Enter Viva Marks: ");
+                            String vivaInput = scanner.nextLine().trim();
+                            if (vivaInput.isEmpty() || !vivaInput.matches("\\d+")) {
+                                System.out.println(RED + "Invalid marks. Please enter only numeric characters." + RESET);
+                                pause(scanner);
+                                break;
+                            }
+                            int viva = Integer.parseInt(vivaInput);
+
+                            System.out.print("Enter Total Marks: ");
+                            String totalInput = scanner.nextLine().trim();
+                            if (totalInput.isEmpty() || !totalInput.matches("\\d+")) {
+                                System.out.println(RED + "Invalid total marks. Please enter only numeric characters." + RESET);
+                                pause(scanner);
+                                break;
+                            }
+                            int totalMarks = Integer.parseInt(totalInput);
+
+                            try {
+                                Exam exam = new Practical(examId, subject, implementation, viva, totalMarks);
+                                student.addExam(exam);
+                                double score = ((Practical) exam).calculateScore();
+                                ExamResult result = new ExamResult(student, exam, (int) score);
+                                examResults.add(result);
+                                System.out.println();
+                                System.out.println(BRIGHT_GREEN + "┌─────────────────────────────────────────────────────────────┐" + RESET);
+                                System.out.println(BRIGHT_GREEN + "│  [OK] SUCCESS: Practical Exam added successfully!           │" + RESET);
+                                System.out.println(BRIGHT_GREEN + "│  Score: " + BOLD + score + "%" + RESET + BRIGHT_GREEN + "                                              │" + RESET);
+                                System.out.println(BRIGHT_GREEN + "└─────────────────────────────────────────────────────────────┘" + RESET);
+                            } catch (ExamException e) {
+                                System.out.println(e.getMessage());
+                            }
+                        } catch (Exception e) {
+                            System.out.println(RED + "Invalid input. Please try again." + RESET);
+                            scanner.nextLine();
+                        }
+                        pause(scanner);
+                        break;
+
+                    case 5:
                         try {
                             printSummaryResult(examResults);
                             printSummaryResultOnScreen(examResults);
@@ -283,7 +369,7 @@ class ExamManagement {
                         pause(scanner);
                         break;
 
-                    case 5:
+                    case 6:
                         try {
                             printDetailedResults(examResults);
                             printDetailedResultsOnScreen(examResults);
@@ -293,7 +379,7 @@ class ExamManagement {
                         pause(scanner);
                         break;
 
-                    case 6:
+                    case 7:
                         scanner.close();
                         return;
 
@@ -331,10 +417,10 @@ class ExamManagement {
             Student student = result.getStudent();
             Exam exam = result.getExam();
             String name = student.getFirstName() + " " + student.getSurname();
-            String subj = exam.getSubject();
+            String subj = getExamSubject(exam);
             if (subj.length() > 4) subj = subj.substring(0, 4);
             System.out.println(String.format(BRIGHT_CYAN + "║ " + WHITE + "%-26d " + BRIGHT_CYAN + "║ " + WHITE + "%-28s " + BRIGHT_CYAN + "║ " + WHITE + "%-9d " + BRIGHT_CYAN + "║ " + WHITE + "%-4s   " + BRIGHT_CYAN + "║" + RESET,
-                    student.getStudentId(), name, exam.getExamId(), subj));
+                    student.getStudentId(), name, getExamId(exam), subj));
         }
 
         System.out.println(BRIGHT_CYAN + "╚════════════════════════════╩══════════════════════════════╩═══════════╩════════╝" + RESET);
@@ -354,10 +440,23 @@ class ExamManagement {
         for (ExamResult result : examResults) {
             Student student = result.getStudent();
             Exam exam = result.getExam();
-            String examTypeLabel = (exam instanceof MultipleChoice) ? "Multi" : "Essay";
-            String examTypeColor = (exam instanceof MultipleChoice) ? BRIGHT_GREEN : MAGENTA;
+            String examTypeLabel;
+            String examTypeColor;
+            if (exam instanceof MultipleChoice) {
+                examTypeLabel = "Multi";
+                examTypeColor = BRIGHT_GREEN;
+            } else if (exam instanceof Essay) {
+                examTypeLabel = "Essay";
+                examTypeColor = MAGENTA;
+            } else if (exam instanceof Practical) {
+                examTypeLabel = "Practical";
+                examTypeColor = CYAN;
+            } else {
+                examTypeLabel = "Other";
+                examTypeColor = WHITE;
+            }
             String name = student.getFirstName() + " " + student.getSurname();
-            String subject = exam.getSubject();
+            String subject = getExamSubject(exam);
             if (subject.length() > 21) subject = subject.substring(0, 21);
             
             String scoreColor;
@@ -367,7 +466,7 @@ class ExamManagement {
             else scoreColor = RED;
             
             System.out.println(String.format(BRIGHT_CYAN + "║ " + WHITE + "%-12d " + BRIGHT_CYAN + "║ " + WHITE + "%-32s " + BRIGHT_CYAN + "║ " + WHITE + "%-9d " + BRIGHT_CYAN + "║ " + WHITE + "%-21s " + BRIGHT_CYAN + "║ " + examTypeColor + "%-7s" + RESET + " " + BRIGHT_CYAN + "║ " + scoreColor + "%3d%%" + RESET + "  " + BRIGHT_CYAN + "║" + RESET,
-                    student.getStudentId(), name, exam.getExamId(), subject, examTypeLabel, score));
+                    student.getStudentId(), name, getExamId(exam), subject, examTypeLabel, score));
         }
 
         System.out.println(BRIGHT_CYAN + "╚══════════════╩══════════════════════════════════╩═══════════╩═══════════════════════╩═════════╩═══════╝" + RESET);
@@ -392,12 +491,13 @@ class ExamManagement {
             Student student = result.getStudent();
             Exam exam = result.getExam();
             String fullName = student.getFirstName() + " " + student.getSurname();
+            String subject = getExamSubject(exam);
             
             writer.write(String.format("%-15d | %-30s | %-12d | %-15s\n",
                     student.getStudentId(), 
                     fullName.length() > 30 ? fullName.substring(0, 27) + "..." : fullName,
-                    exam.getExamId(), 
-                    exam.getSubject().length() > 15 ? exam.getSubject().substring(0, 12) + "..." : exam.getSubject()));
+                    getExamId(exam), 
+                    subject.length() > 15 ? subject.substring(0, 12) + "..." : subject));
         }
         
         // Footer
@@ -427,14 +527,17 @@ class ExamManagement {
         for (ExamResult result : examResults) {
             Student student = result.getStudent();
             Exam exam = result.getExam();
-            String examType = (exam instanceof MultipleChoice) ? "Multi Choice" : "Essay";
+            String examType = "Other";
+            if (exam instanceof MultipleChoice) examType = "Multi Choice";
+            else if (exam instanceof Essay) examType = "Essay";
+            else if (exam instanceof Practical) examType = "Practical";
             String fullName = student.getFirstName() + " " + student.getSurname();
-            String subject = exam.getSubject();
+            String subject = getExamSubject(exam);
             
             writer.write(String.format("%-12d | %-25s | %-10d | %-18s | %-13s | %6d%%\n",
                     student.getStudentId(), 
                     fullName.length() > 25 ? fullName.substring(0, 22) + "..." : fullName,
-                    exam.getExamId(), 
+                    getExamId(exam), 
                     subject.length() > 18 ? subject.substring(0, 15) + "..." : subject,
                     examType, 
                     result.getScore()));
@@ -480,9 +583,10 @@ class ExamManagement {
         System.out.println(BRIGHT_CYAN + "║  " + BRIGHT_GREEN + "1." + WHITE + " [+] Add Student" + "                                                 " + BRIGHT_CYAN + "  ║" + RESET);
         System.out.println(BRIGHT_CYAN + "║  " + BRIGHT_GREEN + "2." + WHITE + " [*] Add Multiple Choice Exam Result" + "                         " + BRIGHT_CYAN + "      ║" + RESET);
         System.out.println(BRIGHT_CYAN + "║  " + BRIGHT_GREEN + "3." + WHITE + " [*] Add Essay Exam Result" + "                                   " + BRIGHT_CYAN + "      ║" + RESET);
-        System.out.println(BRIGHT_CYAN + "║  " + BRIGHT_GREEN + "4." + WHITE + " [=] Print Summary Result" + "                                     " + BRIGHT_CYAN + "     ║" + RESET);
-        System.out.println(BRIGHT_CYAN + "║  " + BRIGHT_GREEN + "5." + WHITE + " [=] Print Detailed Results" + "                                   " + BRIGHT_CYAN + "     ║" + RESET);
-        System.out.println(BRIGHT_CYAN + "║  " + RED + "6." + WHITE + " [X] Quit" + "                                                      " + BRIGHT_CYAN + "    ║" + RESET);
+        System.out.println(BRIGHT_CYAN + "║  " + BRIGHT_GREEN + "4." + WHITE + " [*] Add Practical Exam Result" + "                               " + BRIGHT_CYAN + "      ║" + RESET);
+        System.out.println(BRIGHT_CYAN + "║  " + BRIGHT_GREEN + "5." + WHITE + " [=] Print Summary Result" + "                                     " + BRIGHT_CYAN + "     ║" + RESET);
+        System.out.println(BRIGHT_CYAN + "║  " + BRIGHT_GREEN + "6." + WHITE + " [=] Print Detailed Results" + "                                   " + BRIGHT_CYAN + "     ║" + RESET);
+        System.out.println(BRIGHT_CYAN + "║  " + RED + "7." + WHITE + " [X] Quit" + "                                                      " + BRIGHT_CYAN + "    ║" + RESET);
         System.out.println(BRIGHT_CYAN + "╠═══════════════════════════════════════════════════════════════════════╣" + RESET);
         System.out.println(BRIGHT_CYAN + "║  " + YELLOW + "Students: " + BOLD + BRIGHT_GREEN + String.format("%-3d", studentsCount) + RESET + 
                           YELLOW + "  |  Exam Results: " + BOLD + BRIGHT_GREEN + String.format("%-3d", examsCount) + RESET + 
@@ -490,10 +594,57 @@ class ExamManagement {
         System.out.println(BRIGHT_CYAN + "╚═══════════════════════════════════════════════════════════════════════╝" + RESET);
         System.out.println();
     }
-
     private static void pause(Scanner scanner) {
         System.out.println();
         System.out.print(DIM + ">> Press Enter to continue..." + RESET);
         scanner.nextLine();
+    }
+
+    // Helper to retrieve the 'subject' field from Exam instances even if Exam
+    // does not expose a public getter; uses reflection to search the class hierarchy.
+    public static String getExamSubject(Exam exam) {
+        if (exam == null) return "";
+        try {
+            Class<?> cls = exam.getClass();
+            while (cls != null) {
+                try {
+                    java.lang.reflect.Field f = cls.getDeclaredField("subject");
+                    f.setAccessible(true);
+                    Object value = f.get(exam);
+                    return value == null ? "" : value.toString();
+                } catch (NoSuchFieldException e) {
+                    cls = cls.getSuperclass();
+                }
+            }
+        } catch (Exception e) {
+            // fallback to empty string on any reflection issue
+        }
+        return "";
+    }
+
+    // Helper to retrieve the 'examId' field from Exam instances using reflection.
+    public static int getExamId(Exam exam) {
+        if (exam == null) return -1;
+        try {
+            Class<?> cls = exam.getClass();
+            while (cls != null) {
+                try {
+                    java.lang.reflect.Field f = cls.getDeclaredField("examId");
+                    f.setAccessible(true);
+                    Object value = f.get(exam);
+                    if (value instanceof Number) return ((Number) value).intValue();
+                    try {
+                        return Integer.parseInt(String.valueOf(value));
+                    } catch (Exception ex) {
+                        return -1;
+                    }
+                } catch (NoSuchFieldException e) {
+                    cls = cls.getSuperclass();
+                }
+            }
+        } catch (Exception e) {
+            // fallback to -1 on any reflection issue
+        }
+        return -1;
     }
 }
