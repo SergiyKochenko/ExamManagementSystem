@@ -28,10 +28,12 @@
       - [5. Viewing Summary Results](#5-viewing-summary-results)
       - [6. Viewing Detailed Results](#6-viewing-detailed-results)
       - [7. Exiting the Application](#7-exiting-the-application)
-    - [Tips and Best Practices](#tips-and-best-practices)
+      - [8. Running the System Simulation (Demo)](#8-running-the-system-simulation-demo)
+  - [Tips and Best Practices](#tips-and-best-practices)
     - [Common Error Messages](#common-error-messages)
   - [Usage](#usage)
     - [Input Validation](#input-validation)
+  - [System Simulation (Demo)](#system-simulation-demo)
   - [Project Structure](#project-structure)
   - [Testing](#testing)
   - [Data Storage](#data-storage)
@@ -46,6 +48,8 @@
 
 ## Overview
 This Java console application demonstrates proficiency in object-oriented programming and data management through an exam results management system with a modern, color-coded terminal interface.
+
+- Includes a demo System Simulation (option 8) that showcases realistic interactions among admin, lecturers, course, modules, students, and assessments, with per-module, per-student, and course averages.
 
 ## Technical Competencies
 
@@ -100,6 +104,7 @@ This Java console application demonstrates proficiency in object-oriented progra
 - ✅ Validated input for all entries (IDs, names, numbers, etc.)
 - ✅ Automatic mark adjustment for practical exams
 - ✅ Reflection-based data access for flexible exam handling
+- ✅ Run a System Simulation (option 8) demonstrating admin, lecturers, course, modules, enrollments, assessments, and averages
 
 ## Visual Interface
 
@@ -248,7 +253,7 @@ The application will display a colorful ASCII banner and main menu.
 ### Main Menu Navigation
 
 The main menu displays:
-- **Option 1-7**: Main menu choices
+- **Option 1-8**: Main menu choices
 - **Student count**: Number of registered students
 - **Exam Results count**: Total exam records
 - **Colored indicators**: 
@@ -256,7 +261,7 @@ The main menu displays:
   - Red number = Exit option
   - Yellow text = Statistics
 
-To select an option, type the number (1-7) and press Enter.
+To select an option, type the number (1-8) and press Enter.
 
 ### Step-by-Step Guide
 
@@ -485,7 +490,29 @@ Total records: 3
 
 ---
 
-### Tips and Best Practices
+#### 8. Running the System Simulation (Demo)
+
+**When to use**: To see a demonstration of the system's capabilities with simulated data.
+
+**Steps**:
+1. Select option `8` from the main menu
+
+**What it does**:
+  - Creates a mock admin and lecturers
+  - Defines a course (BSc in Computing) with modules: PROG101, DSA201, SE202, DBS102
+  - Enrolls demo students (Jane Doe, Mark Lee, Sara Khan)
+  - Adds assessments (Multiple Choice, Essay, Practical)
+  - Prints:
+    - Modules & assigned lecturers
+    - Enrolled students
+    - Assessments by module with scores
+    - Per-module averages
+    - Per-student averages (color-coded)
+    - Overall course average
+
+**Purpose**: Demonstrates realistic interactions and verifies that the system’s scoring, aggregation, and reporting work end-to-end.
+
+## Tips and Best Practices
 
 1. **Always add students first**: You cannot add exam results without a registered student.
 
@@ -514,7 +541,7 @@ Total records: 3
 | "Invalid correct answers" | More than total questions | Correct answers ≤ total questions |
 | "Essay answer cannot be empty" | No text entered | Type some text for the essay |
 | "Implementation and viva marks must be non-negative" | Negative numbers entered | Enter 0 or positive numbers |
-| "Invalid choice. Please enter a number between 1 and 7" | Wrong menu option | Type a number from 1 to 7 |
+| "Invalid choice. Please enter a number between 1 and 8" | Wrong menu option | Type a number from 1 to 8 |
 
 **General Troubleshooting**:
 - If you see a red error message, read it carefully
@@ -534,6 +561,7 @@ The system provides a menu-driven interface with the following options:
 5. **[=] Print Summary Result** - Generate and display summary table
 6. **[=] Print Detailed Results** - Generate and display detailed results with scores
 7. **[X] Quit** - Exit the application
+8. **[>] Run System Simulation (demo)** - Generate demo data (admin, lecturers, course/modules, assessments) and print module averages, per-student averages, and overall course average
 
 ### Input Validation
 
@@ -555,6 +583,22 @@ The system provides a menu-driven interface with the following options:
   - Total marks: Automatically adjusted if less than sum of implementation + viva
   - No time limit (duration field not used)
 - **All numeric fields**: Validated for correct format and valid range
+
+## System Simulation (Demo)
+- How to run: start the app and choose option `8` from the main menu.
+- What it does:
+  - Creates a mock admin and lecturers
+  - Defines a course (BSc in Computing) with modules: PROG101, DSA201, SE202, DBS102
+  - Enrolls demo students (Jane Doe, Mark Lee, Sara Khan)
+  - Adds assessments (Multiple Choice, Essay, Practical)
+  - Prints:
+    - Modules & assigned lecturers
+    - Enrolled students
+    - Assessments by module with scores
+    - Per-module averages
+    - Per-student averages (color-coded)
+    - Overall course average
+- Purpose: Demonstrates realistic interactions and verifies that the system’s scoring, aggregation, and reporting work end-to-end.
 
 ## Project Structure
 
@@ -589,6 +633,7 @@ The application includes comprehensive validation for:
 - ✓ Error messages with clear guidance
 - ✓ Automatic correction for practical exam total marks
 - ✓ Reflection-based field access for exam data
+- Use the System Simulation (option 8) to quickly verify scoring logic and aggregated statistics across modules and students.
 
 ## Data Storage
 
