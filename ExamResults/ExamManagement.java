@@ -21,6 +21,10 @@ class ExamManagement {
     public static final String WHITE = "\u001B[37m";
     public static final String BOLD = "\u001B[1m";
     public static final String DIM = "\u001B[2m";
+    public static final String MAGENTA = "\u001B[35m";
+    public static final String BRIGHT_GREEN = "\u001B[92m";
+    public static final String BRIGHT_BLUE = "\u001B[94m";
+    public static final String BRIGHT_CYAN = "\u001B[96m";
 
     
     public static void main(String[] args) {
@@ -76,8 +80,10 @@ class ExamManagement {
                         try {
                             Student student = new Student(studentIdInt, firstName, surname);
                             students.add(student);
-                            System.out.println(GREEN + "✔ Student added successfully." + RESET);
-                            System.out.println(BLUE + "1. Add Student" + RESET);
+                            System.out.println();
+                            System.out.println(BRIGHT_GREEN + "┌─────────────────────────────────────────────────────────────┐" + RESET);
+                            System.out.println(BRIGHT_GREEN + "│  [OK] SUCCESS: Student added successfully!                  │" + RESET);
+                            System.out.println(BRIGHT_GREEN + "└─────────────────────────────────────────────────────────────┘" + RESET);
                         } catch (StudentException e) {
                             System.out.println(e.getMessage());
                         }
@@ -152,8 +158,11 @@ class ExamManagement {
                                 double score = ((MultipleChoice) exam).calculateScore();
                                 ExamResult result = new ExamResult(student, exam, (int) score);
                                 examResults.add(result);
-                                System.out.println(ORANGE + "✔ Multiple Choice Exam result added successfully." + RESET );
-                                System.out.println(BLUE + "2. Add Multiple Choice Exam Result" + RESET);
+                                System.out.println();
+                                System.out.println(BRIGHT_GREEN + "┌─────────────────────────────────────────────────────────────┐" + RESET);
+                                System.out.println(BRIGHT_GREEN + "│  [OK] SUCCESS: Multiple Choice Exam added successfully!     │" + RESET);
+                                System.out.println(BRIGHT_GREEN + "│  Score: " + BOLD + score + "%" + RESET + BRIGHT_GREEN + "                                                  │" + RESET);
+                                System.out.println(BRIGHT_GREEN + "└─────────────────────────────────────────────────────────────┘" + RESET);
                             } catch (ExamException e) {
                                 System.out.println(e.getMessage());
                             }
@@ -162,7 +171,7 @@ class ExamManagement {
                             scanner.nextLine();
                         }
                         pause(scanner);
-                        broke: break;
+                        break;
 
                     case 3:
                         try {
@@ -249,8 +258,11 @@ class ExamManagement {
                                 double score = ((Essay) exam).calculateScore();
                                 ExamResult result = new ExamResult(student, exam, (int) score);
                                 examResults.add(result);
-                                System.out.println(ORANGE + "✔ Essay Exam result added successfully." + RESET);
-                                System.out.println(BLUE + "3. Add Essay Exam Result" + RESET);
+                                System.out.println();
+                                System.out.println(BRIGHT_GREEN + "┌─────────────────────────────────────────────────────────────┐" + RESET);
+                                System.out.println(BRIGHT_GREEN + "│  [OK] SUCCESS: Essay Exam added successfully!               │" + RESET);
+                                System.out.println(BRIGHT_GREEN + "│  Score: " + BOLD + score + "%" + RESET + BRIGHT_GREEN + "                                                  │" + RESET);
+                                System.out.println(BRIGHT_GREEN + "└─────────────────────────────────────────────────────────────┘" + RESET);
                             } catch (ExamException e) {
                                 System.out.println(e.getMessage());
                             }
@@ -308,11 +320,12 @@ class ExamManagement {
     }
 
     private static void printSummaryResultOnScreen(List<ExamResult> examResults) {
-        System.out.println(CYAN + "┌──────────────────────────────────────────────────────────────────────────────┐" + RESET);
-        System.out.println(CYAN + "│ " + BOLD + "SUMMARY RESULTS" + RESET + CYAN + "                                                              │" + RESET);
-        System.out.println(CYAN + "├────────────────────────────┬──────────────────────────────┬───────────┬──────┤" + RESET);
-        System.out.println(String.format("│ %-26s │ %-28s │ %-9s │ %-4s │", "Student ID", "Name", "Exam ID", "Subj"));
-        System.out.println(CYAN + "├────────────────────────────┼──────────────────────────────┼───────────┼──────┤" + RESET);
+        System.out.println();
+        System.out.println(BRIGHT_CYAN + "╔════════════════════════════════════════════════════════════════════════════════╗" + RESET);
+        System.out.println(BRIGHT_CYAN + "║ " + BOLD + BRIGHT_BLUE + "                         [=] SUMMARY RESULTS                                   " + BRIGHT_CYAN + "║" + RESET);
+        System.out.println(BRIGHT_CYAN + "╠════════════════════════════╦══════════════════════════════╦═══════════╦════════╣" + RESET);
+        System.out.println(BRIGHT_CYAN + "║ " + BOLD + YELLOW + "Student ID" + RESET + "                 " + BRIGHT_CYAN + "║ " + BOLD + YELLOW + "Name" + RESET + "                         " + BRIGHT_CYAN + "║ " + BOLD + YELLOW + "Exam ID" + RESET + "   " + BRIGHT_CYAN + "║ " + BOLD + YELLOW + "Subj" + RESET + "   " + BRIGHT_CYAN + "║" + RESET);
+        System.out.println(BRIGHT_CYAN + "╠════════════════════════════╬══════════════════════════════╬═══════════╬════════╣" + RESET);
 
         for (ExamResult result : examResults) {
             Student student = result.getStudent();
@@ -320,76 +333,123 @@ class ExamManagement {
             String name = student.getFirstName() + " " + student.getSurname();
             String subj = exam.getSubject();
             if (subj.length() > 4) subj = subj.substring(0, 4);
-            System.out.println(String.format("│ %-26d │ %-28s │ %-9d │ %-4s │",
+            System.out.println(String.format(BRIGHT_CYAN + "║ " + WHITE + "%-26d " + BRIGHT_CYAN + "║ " + WHITE + "%-28s " + BRIGHT_CYAN + "║ " + WHITE + "%-9d " + BRIGHT_CYAN + "║ " + WHITE + "%-4s   " + BRIGHT_CYAN + "║" + RESET,
                     student.getStudentId(), name, exam.getExamId(), subj));
         }
 
-        System.out.println(CYAN + "└────────────────────────────┴──────────────────────────────┴───────────┴──────┘" + RESET);
-        System.out.println(DIM + "Total rows: " + examResults.size() + RESET);
+        System.out.println(BRIGHT_CYAN + "╚════════════════════════════╩══════════════════════════════╩═══════════╩════════╝" + RESET);
+        System.out.println(YELLOW + "Total records: " + BOLD + examResults.size() + RESET);
+        System.out.println();
     }
 
     private static void printDetailedResultsOnScreen(List<ExamResult> examResults) {
-        System.out.println(CYAN + "┌─────────────────────────────────────────────────────────────────────────────────────────────────────┐" + RESET);
-        System.out.println(CYAN + "│ " + BOLD + "DETAILED RESULTS" + RESET + CYAN + "                                                                                    │" + RESET);
-        System.out.println(CYAN + "├──────────────┬──────────────────────────────────┬───────────┬───────────────────────┬─────────┬─────┤" + RESET);
-        System.out.println(String.format("│ %-12s │ %-32s │ %-9s │ %-21s │ %-7s │ %-3s │",
-                "Student ID", "Name", "Exam ID", "Subject", "Type", "Scr"));
-        System.out.println(CYAN + "├──────────────┼──────────────────────────────────┼───────────┼───────────────────────┼─────────┼─────┤" + RESET);
+        System.out.println();
+        System.out.println(BRIGHT_CYAN + "╔═══════════════════════════════════════════════════════════════════════════════════════════════════════╗" + RESET);
+        System.out.println(BRIGHT_CYAN + "║ " + BOLD + BRIGHT_BLUE + "                                     [=] DETAILED RESULTS                                             " + BRIGHT_CYAN + "║" + RESET);
+        System.out.println(BRIGHT_CYAN + "╠══════════════╦══════════════════════════════════╦═══════════╦═══════════════════════╦═════════╦═══════╣" + RESET);
+        System.out.println(String.format(BRIGHT_CYAN + "║ " + BOLD + YELLOW + "%-12s" + RESET + " " + BRIGHT_CYAN + "║ " + BOLD + YELLOW + "%-32s" + RESET + " " + BRIGHT_CYAN + "║ " + BOLD + YELLOW + "%-9s" + RESET + " " + BRIGHT_CYAN + "║ " + BOLD + YELLOW + "%-21s" + RESET + " " + BRIGHT_CYAN + "║ " + BOLD + YELLOW + "%-7s" + RESET + " " + BRIGHT_CYAN + "║ " + BOLD + YELLOW + "%-5s" + RESET + " " + BRIGHT_CYAN + "║" + RESET,
+                "Student ID", "Name", "Exam ID", "Subject", "Type", "Score"));
+        System.out.println(BRIGHT_CYAN + "╠══════════════╬══════════════════════════════════╬═══════════╬═══════════════════════╬═════════╬═══════╣" + RESET);
 
         for (ExamResult result : examResults) {
             Student student = result.getStudent();
             Exam exam = result.getExam();
-            String examType = (exam instanceof MultipleChoice) ? (YELLOW + "Multi" + RESET) : (BLUE + "Essay" + RESET);
+            String examTypeLabel = (exam instanceof MultipleChoice) ? "Multi" : "Essay";
+            String examTypeColor = (exam instanceof MultipleChoice) ? BRIGHT_GREEN : MAGENTA;
             String name = student.getFirstName() + " " + student.getSurname();
             String subject = exam.getSubject();
             if (subject.length() > 21) subject = subject.substring(0, 21);
-            System.out.println(String.format("│ %-12d │ %-32s │ %-9d │ %-21s │ %-7s │ %-3d │",
-                    student.getStudentId(), name, exam.getExamId(), subject, examType, result.getScore()));
+            
+            String scoreColor;
+            int score = result.getScore();
+            if (score >= 70) scoreColor = BRIGHT_GREEN;
+            else if (score >= 50) scoreColor = YELLOW;
+            else scoreColor = RED;
+            
+            System.out.println(String.format(BRIGHT_CYAN + "║ " + WHITE + "%-12d " + BRIGHT_CYAN + "║ " + WHITE + "%-32s " + BRIGHT_CYAN + "║ " + WHITE + "%-9d " + BRIGHT_CYAN + "║ " + WHITE + "%-21s " + BRIGHT_CYAN + "║ " + examTypeColor + "%-7s" + RESET + " " + BRIGHT_CYAN + "║ " + scoreColor + "%3d%%" + RESET + "  " + BRIGHT_CYAN + "║" + RESET,
+                    student.getStudentId(), name, exam.getExamId(), subject, examTypeLabel, score));
         }
 
-        System.out.println(CYAN + "└──────────────┴──────────────────────────────────┴───────────┴───────────────────────┴─────────┴─────┘" + RESET);
-        System.out.println(DIM + "Total rows: " + examResults.size() + RESET);
+        System.out.println(BRIGHT_CYAN + "╚══════════════╩══════════════════════════════════╩═══════════╩═══════════════════════╩═════════╩═══════╝" + RESET);
+        System.out.println(YELLOW + "Total records: " + BOLD + examResults.size() + RESET);
+        System.out.println();
     }
 
 
     private static void printSummaryResult(List<ExamResult> examResults) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter("summary_result.txt"));
-        writer.write("-------------------------------------------------------\n");
-        writer.write(String.format("%-22s%-30s%-25s%-25s\n", "Student ID", "Name", "Exam ID", "Subject"));
-        writer.write("-------------------------------------------------------\n");
+        
+        // Header
+        writer.write("================================================================================\n");
+        writer.write("                          SUMMARY RESULTS REPORT                                \n");
+        writer.write("================================================================================\n");
+        writer.write(String.format("%-15s | %-30s | %-12s | %-15s\n", 
+                "Student ID", "Name", "Exam ID", "Subject"));
+        writer.write("--------------------------------------------------------------------------------\n");
 
+        // Data rows
         for (ExamResult result : examResults) {
             Student student = result.getStudent();
             Exam exam = result.getExam();
-            // Use full name (firstName + " " + surname)
-            writer.write(String.format("%-22d%-30s%-25d%-25s\n",
-                    student.getStudentId(), student.getFirstName() + " " + student.getSurname(),
-                    exam.getExamId(), exam.getSubject()));
+            String fullName = student.getFirstName() + " " + student.getSurname();
+            
+            writer.write(String.format("%-15d | %-30s | %-12d | %-15s\n",
+                    student.getStudentId(), 
+                    fullName.length() > 30 ? fullName.substring(0, 27) + "..." : fullName,
+                    exam.getExamId(), 
+                    exam.getSubject().length() > 15 ? exam.getSubject().substring(0, 12) + "..." : exam.getSubject()));
         }
+        
+        // Footer
+        writer.write("================================================================================\n");
+        writer.write(String.format("Total Records: %d\n", examResults.size()));
+        writer.write("================================================================================\n");
 
         writer.close();
-        System.out.println(ORANGE + "Summary result written to summary_result.txt and screen display" + RESET);
+        System.out.println();
+        System.out.println(BRIGHT_GREEN + "┌─────────────────────────────────────────────────────────────┐" + RESET);
+        System.out.println(BRIGHT_GREEN + "│  [OK] Summary results saved to 'summary_result.txt'         │" + RESET);
+        System.out.println(BRIGHT_GREEN + "└─────────────────────────────────────────────────────────────┘" + RESET);
     }
 
     private static void printDetailedResults(List<ExamResult> examResults) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter("detailed_results.txt"));
-        writer.write("-------------------------------------------------------\n");
-        writer.write(String.format("%-22s%-30s%-25s%-25s%-25s%-25s\n",
+        
+        // Header
+        writer.write("====================================================================================================\n");
+        writer.write("                                  DETAILED RESULTS REPORT                                          \n");
+        writer.write("====================================================================================================\n");
+        writer.write(String.format("%-12s | %-25s | %-10s | %-18s | %-13s | %-7s\n",
                 "Student ID", "Name", "Exam ID", "Subject", "Exam Type", "Score"));
-        writer.write("-------------------------------------------------------\n");
+        writer.write("----------------------------------------------------------------------------------------------------\n");
 
+        // Data rows
         for (ExamResult result : examResults) {
             Student student = result.getStudent();
             Exam exam = result.getExam();
             String examType = (exam instanceof MultipleChoice) ? "Multi Choice" : "Essay";
-            // Use full name (firstName + " " + surname)
-            writer.write(String.format("%-22d%-30s%-25d%-25s%-25s%-25d\n",
-                    student.getStudentId(), student.getFirstName() + " " + student.getSurname(),
-                    exam.getExamId(), exam.getSubject(), examType, result.getScore()));
+            String fullName = student.getFirstName() + " " + student.getSurname();
+            String subject = exam.getSubject();
+            
+            writer.write(String.format("%-12d | %-25s | %-10d | %-18s | %-13s | %6d%%\n",
+                    student.getStudentId(), 
+                    fullName.length() > 25 ? fullName.substring(0, 22) + "..." : fullName,
+                    exam.getExamId(), 
+                    subject.length() > 18 ? subject.substring(0, 15) + "..." : subject,
+                    examType, 
+                    result.getScore()));
         }
+        
+        // Footer
+        writer.write("====================================================================================================\n");
+        writer.write(String.format("Total Records: %d\n", examResults.size()));
+        writer.write("====================================================================================================\n");
 
         writer.close();
-        System.out.println(ORANGE + "Detailed results written to detailed_results.txt and screen display" + RESET);
+        System.out.println();
+        System.out.println(BRIGHT_GREEN + "┌─────────────────────────────────────────────────────────────┐" + RESET);
+        System.out.println(BRIGHT_GREEN + "│  [OK] Detailed results saved to 'detailed_results.txt'      │" + RESET);
+        System.out.println(BRIGHT_GREEN + "└─────────────────────────────────────────────────────────────┘" + RESET);
     }
 
     // UI helpers
@@ -399,27 +459,41 @@ class ExamManagement {
     }
 
     private static void printBanner() {
-        System.out.println(GREEN + "╔═══════════════════════════════════════════════════════════════════╗" + RESET);
-        System.out.println(CYAN  + "║" + YELLOW + " W E L C O M E   T O  " + WHITE + " E X A M   M A N A G E M E N T   S Y S T E M " + CYAN + "║" + RESET);
-        System.out.println(GREEN + "╚═══════════════════════════════════════════════════════════════════╝" + RESET);
+        System.out.println();
+        System.out.println(BRIGHT_CYAN + "╔═══════════════════════════════════════════════════════════════════════╗" + RESET);
+        System.out.println(BRIGHT_CYAN + "║" + BOLD + BRIGHT_GREEN + "   ███████╗██╗  ██╗ █████╗ ███╗   ███╗    ███████╗██╗   ██╗███████╗   " + BRIGHT_CYAN + " ║" + RESET);
+        System.out.println(BRIGHT_CYAN + "║" + BOLD + BRIGHT_GREEN + "   ██╔════╝╚██╗██╔╝██╔══██╗████╗ ████║    ██╔════╝╚██╗ ██╔╝██╔════╝   " + BRIGHT_CYAN + " ║" + RESET);
+        System.out.println(BRIGHT_CYAN + "║" + BOLD + YELLOW + "   █████╗   ╚███╔╝ ███████║██╔████╔██║    ███████╗ ╚████╔╝ ███████╗   " + BRIGHT_CYAN + " ║" + RESET);
+        System.out.println(BRIGHT_CYAN + "║" + BOLD + YELLOW + "   ██╔══╝   ██╔██╗ ██╔══██║██║╚██╔╝██║    ╚════██║  ╚██╔╝  ╚════██║   " + BRIGHT_CYAN + " ║" + RESET);
+        System.out.println(BRIGHT_CYAN + "║" + BOLD + ORANGE + "   ███████╗██╔╝ ██╗██║  ██║██║ ╚═╝ ██║    ███████║   ██║   ███████║   " + BRIGHT_CYAN + " ║" + RESET);
+        System.out.println(BRIGHT_CYAN + "║" + BOLD + ORANGE + "   ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝    ╚══════╝   ╚═╝   ╚══════╝   " + BRIGHT_CYAN + " ║" + RESET);
+        System.out.println(BRIGHT_CYAN + "║" + CYAN + "                                                                       " + BRIGHT_CYAN + "║" + RESET);
+        System.out.println(BRIGHT_CYAN + "║" + WHITE + "             " + BOLD + ">> STUDENT EXAMINATION MANAGEMENT SYSTEM <<" + RESET + WHITE + "             " + BRIGHT_CYAN + "  ║" + RESET);
+        System.out.println(BRIGHT_CYAN + "╚═══════════════════════════════════════════════════════════════════════╝" + RESET);
         System.out.println();
     }
 
     private static void printMenu(int studentsCount, int examsCount) {
-        System.out.println(CYAN + "┌────────────────────────────── MENU ───────────────────────────────┐" + RESET);
-        System.out.println(String.format("│ %-63s   │", "1. Add Student"));
-        System.out.println(String.format("│ %-63s   │", "2. Add Multiple Choice Exam Result"));
-        System.out.println(String.format("│ %-63s   │", "3. Add Essay Exam Result"));
-        System.out.println(String.format("│ %-63s   │", "4. Print Summary Result"));
-        System.out.println(String.format("│ %-63s   │", "5. Print Detailed Results"));
-        System.out.println(String.format("│ %-63s   │", "6. Quit"));
-        System.out.println(CYAN + "├───────────────────────────────────────────────────────────────────┤" + RESET);
-        System.out.println(String.format("│ %-31s %-31s                     │", "Students: " + GREEN + studentsCount + RESET, "Exam results: " + GREEN + examsCount + RESET));
-        System.out.println(CYAN + "└───────────────────────────────────────────────────────────────────┘" + RESET);
+        System.out.println(BRIGHT_CYAN + "╔═══════════════════════════════════════════════════════════════════════╗" + RESET);
+        System.out.println(BRIGHT_CYAN + "║" + BOLD + BRIGHT_BLUE + "                           MAIN MENU                                   " + BRIGHT_CYAN + "║" + RESET);
+        System.out.println(BRIGHT_CYAN + "╠═══════════════════════════════════════════════════════════════════════╣" + RESET);
+        System.out.println(BRIGHT_CYAN + "║  " + BRIGHT_GREEN + "1." + WHITE + " [+] Add Student" + "                                                 " + BRIGHT_CYAN + "  ║" + RESET);
+        System.out.println(BRIGHT_CYAN + "║  " + BRIGHT_GREEN + "2." + WHITE + " [*] Add Multiple Choice Exam Result" + "                         " + BRIGHT_CYAN + "      ║" + RESET);
+        System.out.println(BRIGHT_CYAN + "║  " + BRIGHT_GREEN + "3." + WHITE + " [*] Add Essay Exam Result" + "                                   " + BRIGHT_CYAN + "      ║" + RESET);
+        System.out.println(BRIGHT_CYAN + "║  " + BRIGHT_GREEN + "4." + WHITE + " [=] Print Summary Result" + "                                     " + BRIGHT_CYAN + "     ║" + RESET);
+        System.out.println(BRIGHT_CYAN + "║  " + BRIGHT_GREEN + "5." + WHITE + " [=] Print Detailed Results" + "                                   " + BRIGHT_CYAN + "     ║" + RESET);
+        System.out.println(BRIGHT_CYAN + "║  " + RED + "6." + WHITE + " [X] Quit" + "                                                      " + BRIGHT_CYAN + "    ║" + RESET);
+        System.out.println(BRIGHT_CYAN + "╠═══════════════════════════════════════════════════════════════════════╣" + RESET);
+        System.out.println(BRIGHT_CYAN + "║  " + YELLOW + "Students: " + BOLD + BRIGHT_GREEN + String.format("%-3d", studentsCount) + RESET + 
+                          YELLOW + "  |  Exam Results: " + BOLD + BRIGHT_GREEN + String.format("%-3d", examsCount) + RESET + 
+                          "                                  " + BRIGHT_CYAN + "║" + RESET);
+        System.out.println(BRIGHT_CYAN + "╚═══════════════════════════════════════════════════════════════════════╝" + RESET);
+        System.out.println();
     }
 
     private static void pause(Scanner scanner) {
-        System.out.print(DIM + "Press Enter to continue..." + RESET);
+        System.out.println();
+        System.out.print(DIM + ">> Press Enter to continue..." + RESET);
         scanner.nextLine();
     }
 }
