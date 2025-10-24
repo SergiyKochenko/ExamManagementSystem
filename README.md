@@ -13,6 +13,7 @@
     - [6. Design Patterns](#6-design-patterns)
   - [Features](#features)
   - [Visual Interface](#visual-interface)
+    - [Class Diagram](#class-diagram)
   - [Getting Started](#getting-started)
     - [Prerequisites](#prerequisites)
     - [Installation](#installation)
@@ -120,6 +121,83 @@ Colors used:
 - `ORANGE`: Prompts and special indicators
 - `MAGENTA`: Essay exam type indicators
 - `CYAN`: Practical exam type indicators
+
+### Class Diagram
+
+```mermaid
+classDiagram
+    class Student {
+        -int studentId
+        -String firstName
+        -String surname
+        +getStudentId()
+        +getFirstName()
+        +getSurname()
+        +addExam(Exam)
+        +getExams()
+    }
+
+    class Exam {
+        <<abstract>>
+        -int examId
+        -String subject
+        -int duration
+        +getExamId()
+        +getSubject()
+        +getDuration()
+        +calculateScore()
+        +displayExamDetails()
+    }
+
+    class MultipleChoice {
+        -int correctAnswers
+        -int totalQuestions
+        +calculateScore()
+        +displayExamDetails()
+    }
+
+    class Essay {
+        -String essayAnswer
+        -int grammar
+        -int content
+        -int wordLimit
+        +calculateScore()
+        +displayExamDetails()
+    }
+
+    class Practical {
+        -int implementation
+        -int viva
+        -int totalMarks
+        +calculateScore()
+        +displayExamDetails()
+    }
+
+    class ExamResult {
+        -Student student
+        -Exam exam
+        -int score
+        +getStudent()
+        +getExam()
+        +getScore()
+    }
+
+    class ExamException
+    class StudentException
+
+    Student "1" -- "*" ExamResult : has
+    ExamResult "*" -- "1" Exam : for
+    Exam <|-- MultipleChoice
+    Exam <|-- Essay
+    Exam <|-- Practical
+    ExamException <|-- Exception
+    StudentException <|-- Exception
+```
+
+**Legend:**
+- `<|--` = inheritance
+- `"1" -- "*" = association (one-to-many)
+- `<<abstract>>` = abstract class
 
 ## Getting Started
 
