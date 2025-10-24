@@ -129,80 +129,107 @@ Colors used:
 
 ### Class Diagram
 
-```mermaid
-classDiagram
-    class Student {
-        -int studentId
-        -String firstName
-        -String surname
-        +getStudentId()
-        +getFirstName()
-        +getSurname()
-        +addExam(Exam)
-        +getExams()
-    }
+```text
++-----------------------------------------+
+|              ExamManagement             |
++-----------------------------------------+
+| - students : List<Student>              |
+| - examResults : List<ExamResult>        |
+| - scanner : Scanner                     |
++-----------------------------------------+
+| + main(args : String[]) : void          |
+| - findStudentById(...): Student         |
+| - printSummaryResult(...): void         |
+| - printDetailedResults(...): void       |
+| - printSummaryResultOnScreen(...):void  |
+| - printDetailedResultsOnScreen(...):void|
+| - clearScreen() : void                  |
+| - printBanner() : void                  |
+| - printMenu(stu:int, ex:int): void      |
+| - pause(scanner: Scanner): void         |
+| + getExamSubject(exam: Exam): String    |
+| + getExamId(exam: Exam): int            |
+| - runSystemSimulation() : void          |
++-----------------------------------------+
 
-    class Exam {
-        <<abstract>>
-        -int examId
-        -String subject
-        -int duration
-        +getExamId()
-        +getSubject()
-        +getDuration()
-        +calculateScore()
-        +displayExamDetails()
-    }
+              1      *
+ExamManagement ─────────▶ Student
+              1      *
+ExamManagement ─────────▶ ExamResult
 
-    class MultipleChoice {
-        -int correctAnswers
-        -int totalQuestions
-        +calculateScore()
-        +displayExamDetails()
-    }
 
-    class Essay {
-        -String essayAnswer
-        -int grammar
-        -int content
-        -int wordLimit
-        +calculateScore()
-        +displayExamDetails()
-    }
++-----------------------------------------------------------------+
+|                           Student                               |
++-----------------------------------------------------------------+
+| - studentId : int                                               |
+| - firstName : String                                            |
+| - surname : String                                              |
+| - exams : List<Exam>                                            |
++-----------------------------------------------------------------+
+| + Student(id:int, fn:String, sn:String) throws StudentException |
+| + addExam(exam : Exam) : void                                   |
+| + getStudentId() : int                                          |
+| + getFirstName() : String                                       |
+| + getSurname() : String                                         |
+| + isValidStudentId(id:String):boolean [static]                  |
+| + isValidStudentName(n:String):boolean [static]                 |
++-----------------------------------------------------------------+
 
-    class Practical {
-        -int implementation
-        -int viva
-        -int totalMarks
-        +calculateScore()
-        +displayExamDetails()
-    }
+              1      0..*
+Student ───────────────▶ Exam
 
-    class ExamResult {
-        -Student student
-        -Exam exam
-        -int score
-        +getStudent()
-        +getExam()
-        +getScore()
-    }
 
-    class ExamException
-    class StudentException
++-------------------------------------+
+|             ExamResult              |
++-------------------------------------+
+| - student : Student                 |
+| - exam : Exam                       |
+| - score : int                       |
++-------------------------------------+
+| + getStudent() : Student            |
+| + getExam() : Exam                  |
+| + getScore() : int                  |
++-------------------------------------+
 
-    Student "1" -- "*" ExamResult : has
-    ExamResult "*" -- "1" Exam : for
-    Exam <|-- MultipleChoice
-    Exam <|-- Essay
-    Exam <|-- Practical
-    ExamException <|-- Exception
-    StudentException <|-- Exception
+ExamResult ─────────▶ Student
+ExamResult ─────────▶ Exam
+
+
++-------------------------------------+
+|           Exam (abstract)           |
++-------------------------------------+
+| - examId : int                      |
+| - subject : String                  |
++-------------------------------------+
+| + calculateScore() : double         |
++-------------------------------------+
+
+                 ▲
+                 │
+       ┌─────────┼───────────────────────────────────────────┬────────────────────────────────────────┐
+       │                                                     │                                        │
++-------------------------------------+   +-------------------------------------+   +-------------------------------------+
+|           MultipleChoice            |   |               Essay                 |   |              Practical              |
++-------------------------------------+   +-------------------------------------+   +-------------------------------------+
+| - duration : int                    |   | - duration : int                    |   | - implementation : int              |
+| - correctAnswers : int              |   | - essayAnswer : String              |   | - viva : int                        |
+| - noQuestions : int                 |   | - grammar : int                     |   | - totalMarks : int                  |
+|                                     |   | - content : int                     |   |                                     |
+|                                     |   | - wordLimit : int                   |   |                                     |
++-------------------------------------+   +-------------------------------------+   +-------------------------------------+
+| + calculateScore() : double         |   | + calculateScore() : double         |   | + calculateScore() : double         |
++-------------------------------------+   +-------------------------------------+   +-------------------------------------+
+
+
++---------------------------+        +------------------------+
+|      StudentException     |        |      ExamException     |
++---------------------------+        +------------------------+
+| extends Exception         |        | extends Exception      |
++---------------------------+        +------------------------+
+
+Note:
+- Exam.examId and Exam.subject are accessed via reflection in ExamManagement.
 ```
-
-**Legend:**
-- `<|--` = inheritance
-- `"1" -- "*" = association (one-to-many)
-- `<<abstract>>` = abstract class
 
 ## Getting Started
 
